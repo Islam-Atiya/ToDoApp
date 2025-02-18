@@ -35,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
         }
         true
     }
+        bindind.bottomNavigationView.selectedItemId=R.id.tasks
 
     }
 
