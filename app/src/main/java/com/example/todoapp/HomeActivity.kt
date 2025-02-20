@@ -12,12 +12,15 @@ import com.example.todoapp.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
     lateinit var bindind :ActivityHomeBinding
+    private var tasksFragment: TasksFragment? = null
         @SuppressLint("SuspiciousIndentation")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             bindind=ActivityHomeBinding.inflate(layoutInflater)
                 setContentView(bindind.root)
-
+            tasksFragment =
+                supportFragmentManager.findFragmentByTag("TASKS_FRAGMENT") as? TasksFragment
+                    ?: TasksFragment()
                 setNavgetion()
                 setOnFabClick()
 
@@ -27,10 +30,10 @@ class HomeActivity : AppCompatActivity() {
     private fun setNavgetion() {
     bindind.bottomNavigationView.setOnItemSelectedListener { menuItem->
         if (menuItem.itemId==R.id.tasks){
-            showFragment(TasksFragment())
+            showFragment(tasksFragment!!, "TASKS_FRAGMENT")
             bindind.title.text=getString(R.string.to_do_list)
         }else if (menuItem.itemId==R.id.settings){
-            showFragment(SettingsFragment())
+            showFragment(SettingsFragment(), "SITTING_FRAGMENT")
             bindind.title.text=getString(R.string.settings)
         }
         true
@@ -39,9 +42,9 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    private fun showFragment(fragment: Fragment) {
+    private fun showFragment(fragment: Fragment, tag: String) {
 supportFragmentManager.beginTransaction()
-    .replace(R.id.fragment_container,fragment)
+    .replace(R.id.fragment_container, fragment, tag)
     .setCustomAnimations(R.anim.fade_in,R.anim.fade_out)
     .commit()
     }
@@ -51,6 +54,8 @@ supportFragmentManager.beginTransaction()
            val bottomsheet=AddTaskFragment()
            bottomsheet.show(supportFragmentManager,"")
            bottomsheet.onTaskAdded=AddTaskFragment.OnTaskAdded { task: Task ->
+
+               tasksFragment?.lodAllTaskOfDate(task.date!!)
 
            }
 

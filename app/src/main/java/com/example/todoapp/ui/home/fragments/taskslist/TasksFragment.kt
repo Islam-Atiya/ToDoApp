@@ -1,5 +1,6 @@
 package com.example.todo.ui.home.fragments.taskslist
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.todoapp.databasee.MyDatabase
 import com.example.todoapp.databasee.dao.TaskDao
 import com.example.todoapp.databinding.FragmentTasksBinding
+import com.example.todoapp.ui.home.fragments.edit_task.EditTaskActivity
 import com.example.todoapp.ui.home.fragments.taskslist.TaskAdapter
 import com.example.todoapp.ui.util.clearTime
+import com.example.todoapp.ui.util.constans
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.time.LocalDateTime
 import java.util.Calendar
@@ -19,7 +22,8 @@ import java.util.Calendar
 
 class   TasksFragment : Fragment() {
 
-    private lateinit var binding: FragmentTasksBinding
+    private var _binding: FragmentTasksBinding? = null
+    private val binding get() = _binding!!
 private val adapter=TaskAdapter()
     lateinit var dao: TaskDao
     override fun onCreateView(
@@ -27,7 +31,7 @@ private val adapter=TaskAdapter()
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTasksBinding.inflate(inflater,container,false)
+        _binding = FragmentTasksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -53,8 +57,26 @@ private val adapter=TaskAdapter()
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun initRecyclerView() {
     binding.rvTasks.adapter=adapter
+        adapter.onDeleteBtnClickListener = TaskAdapter.onTaskClickListener { position, task ->
+
+            dao.deleteTask(task)
+            adapter.deleteTask(position)
+
+        }
+        adapter.onDoneBtnClickListener = TaskAdapter.onTaskClickListener { position, task ->
+            task.isDone = !task.isDone
+            dao.updateTask(task)
+            adapter.updateTask(position, task)
+        }
+
+        adapter.onItemClickListener = TaskAdapter.onTaskClickListener { position, task ->
+            val intent = Intent(requireContext(), EditTaskActivity::class.java)
+            intent.putExtra(constans.TASK_KEY, task)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -62,7 +84,7 @@ private val adapter=TaskAdapter()
         lodAllTaskOfDate(getSelectedDate().timeInMillis)
     }
 
-    private fun lodAllTaskOfDate(date: Long) {
+    fun lodAllTaskOfDate(date: Long) {
             val task =dao.getAllTaskByDate(date).toMutableList()
         adapter.setTask(task)
     }
@@ -78,5 +100,12 @@ private val adapter=TaskAdapter()
     return calendar
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        adapter.onDoneBtnClickListener = null
+        adapter.onDeleteBtnClickListener = null
+        adapter.onItemClickListener = null
+    }
 
 }
