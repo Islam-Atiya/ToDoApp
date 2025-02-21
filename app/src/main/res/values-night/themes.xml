@@ -13,7 +13,7 @@
     </style>
 
     <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/onBackground</item>
     </style>
 
 </resources>

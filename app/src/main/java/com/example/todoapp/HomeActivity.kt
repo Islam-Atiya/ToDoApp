@@ -13,6 +13,7 @@ import com.example.todoapp.databinding.ActivityHomeBinding
 class HomeActivity : AppCompatActivity() {
     lateinit var bindind :ActivityHomeBinding
     private var tasksFragment: TasksFragment? = null
+    private var currentFragment: String? = null
         @SuppressLint("SuspiciousIndentation")
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -24,7 +25,23 @@ class HomeActivity : AppCompatActivity() {
                 setNavgetion()
                 setOnFabClick()
 
+            if (savedInstanceState != null) {
+                currentFragment = savedInstanceState.getString("currentFragment")
+                if (currentFragment != null) {
+                    val fragment = supportFragmentManager.findFragmentByTag(currentFragment)
+                    if (fragment != null) {
+                        supportFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                            .replace(R.id.fragment_container, fragment, currentFragment)
 
+                            .commit()
+
+                    }
+                }
+            } else {
+                bindind.bottomNavigationView.selectedItemId = R.id.tasks
+
+            }
         }
 
     private fun setNavgetion() {
@@ -38,14 +55,18 @@ class HomeActivity : AppCompatActivity() {
         }
         true
     }
-        bindind.bottomNavigationView.selectedItemId=R.id.tasks
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("currentFragment", currentFragment)
+    }
     private fun showFragment(fragment: Fragment, tag: String) {
+        currentFragment = tag
 supportFragmentManager.beginTransaction()
+    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
     .replace(R.id.fragment_container, fragment, tag)
-    .setCustomAnimations(R.anim.fade_in,R.anim.fade_out)
     .commit()
     }
 

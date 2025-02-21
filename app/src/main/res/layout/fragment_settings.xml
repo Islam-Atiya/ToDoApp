@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent">
 
     <ImageView
@@ -20,6 +21,7 @@
         android:layout_marginEnd="30dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/language"
+        android:textColor="@color/onBackground"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/top_view" />
@@ -36,15 +38,16 @@
         app:boxBackgroundColor="@color/bottom_nav_bg_color"
         app:boxStrokeColor="@color/blue"
         app:layout_constraintTop_toBottomOf="@id/language_tv"
-        app:startIconDrawable="@drawable/ic_languages">
+        app:startIconDrawable="@drawable/ic_languages"
+        app:startIconTint="@color/onBackground">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/autoCompleteTV_languages"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/poppins_bold"
             android:inputType="none"
-            android:text="@string/english"
+            tools:text="@string/english"
             android:textColor="@color/blue" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +62,7 @@
         android:text="@string/mode"
         android:textSize="24sp"
         android:textStyle="bold"
-
+        android:textColor="@color/onBackground"
         app:layout_constraintTop_toBottomOf="@id/languages_til" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -75,15 +78,16 @@
         app:boxBackgroundColor="@color/bottom_nav_bg_color"
         app:boxStrokeColor="@color/blue"
         app:layout_constraintTop_toBottomOf="@id/mode_tv"
-        app:startIconDrawable="@drawable/ic_light_mode">
+        app:startIconDrawable="@drawable/ic_light_mode"
+        app:startIconTint="@color/onBackground">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/autoCompleteTV_modes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/poppins_bold"
             android:inputType="none"
-            android:text="@string/light"
+            tools:text="@string/light"
             android:textColor="@color/blue"
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>

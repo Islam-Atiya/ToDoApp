@@ -41,6 +41,9 @@ android {
         viewBinding = true
         dataBinding = true
     }
+    androidResources {
+        generateLocaleConfig = true
+    }
 }
 
 dependencies {

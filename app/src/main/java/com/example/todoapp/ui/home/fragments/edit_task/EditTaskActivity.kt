@@ -134,12 +134,14 @@ class EditTaskActivity : AppCompatActivity() {
     private fun setupToolBar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finish()
-            }
-
-        })
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+//        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                finish()
+//            }
+//
+//        })
     }
 }

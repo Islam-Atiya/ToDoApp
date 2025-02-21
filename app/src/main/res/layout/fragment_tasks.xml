@@ -36,6 +36,8 @@
                 android:background="@color/bottom_nav_bg_color"
                 app:layout_constraintTop_toTopOf="parent"
                 app:mcv_calendarMode="week"
+                app:mcv_headerTextAppearance="@style/CustomTextAppearance"
+                app:mcv_weekDayTextAppearance="@style/CustomTextAppearance"
                 app:mcv_dateTextAppearance="@style/CustomTextAppearance"
                 app:mcv_selectionColor="@color/blue"
                 app:mcv_showOtherDates="all" />
