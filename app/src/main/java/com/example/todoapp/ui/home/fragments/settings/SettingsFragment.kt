@@ -1,6 +1,8 @@
 package com.example.todo.ui.home.fragments.settings
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,11 +15,13 @@ import androidx.core.os.LocaleListCompat
 import androidx.fragment.app.Fragment
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentSettingsBinding
+import com.example.todoapp.ui.util.applyModeChange
 import com.example.todoapp.ui.util.constans
 import org.intellij.lang.annotations.Language
 
 class SettingsFragment : Fragment() {
     private lateinit var binding: FragmentSettingsBinding
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,6 +34,8 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupListener()
+        sharedPreferences =
+            requireContext().getSharedPreferences(constans.sp_Name, Context.MODE_PRIVATE)
     }
 
     override fun onStart() {
@@ -69,18 +75,17 @@ class SettingsFragment : Fragment() {
 
             val isDark = selectedMode == getString(R.string.dark)
             applyModeChange(isDark)
+            saveModeToSp(isDark)
         }
     }
 
-    private fun applyModeChange(isDark: Boolean) {
-        if (isDark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+    private fun saveModeToSp(isdark: Boolean) {
 
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-        }
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(constans.isDarkModeKey, isdark)
+        editor.apply()
     }
+
 
     @SuppressLint("SuspiciousIndentation")
     private fun setLanguageDropDownMenuListener() {
@@ -111,9 +116,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setInitialModeState() {
-        val currentDeviceMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val currentDeviceMode = AppCompatDelegate.getDefaultNightMode()
         val mode = when (currentDeviceMode) {
-            Configuration.UI_MODE_NIGHT_YES -> R.string.dark
+            AppCompatDelegate.MODE_NIGHT_YES -> R.string.dark
             else -> R.string.light
 
         }
